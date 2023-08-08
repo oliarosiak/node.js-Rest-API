@@ -1,5 +1,3 @@
-const Joi = require("joi");
-
 const {
   listContacts,
   getContactById,
@@ -10,18 +8,12 @@ const {
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-
-const getAll = async (_, res, next) => {
+const getAll = async (_, res) => {
   const result = await listContacts();
   res.json(result);
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
   const result = await getContactById(contactId);
   if (!result) {
@@ -30,16 +22,12 @@ const getById = async (req, res, next) => {
   res.json(result);
 };
 
-const add = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "Missing required name field");
-  }
+const add = async (req, res) => {
   const result = await addContact(req.body);
   res.status(201).json(result);
 };
 
-const deleteById = async (req, res, next) => {
+const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
   if (!result) {
@@ -50,11 +38,7 @@ const deleteById = async (req, res, next) => {
   });
 };
 
-const updateById = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "Missing fields");
-  }
+const updateById = async (req, res) => {
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
   if (!result) {
