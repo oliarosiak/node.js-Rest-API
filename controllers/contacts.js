@@ -1,35 +1,29 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contact");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAll = async (_, res) => {
-  const result = await listContacts();
+const getAllContacts = async (_, res) => {
+  const result = await Contact.find();
   res.json(result);
 };
 
-const getById = async (req, res) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await getContactById(contactId);
+  const result = await Contact.findById(contactId);
   if (!result) {
     throw HttpError(404, "Not found!");
   }
   res.json(result);
 };
 
-const add = async (req, res) => {
-  const result = await addContact(req.body);
+const addNewContact = async (req, res) => {
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
-const deleteById = async (req, res) => {
+const deleteContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
+  const result = await Contact.findByIdAndRemove(contactId);
   if (!result) {
     throw HttpError(404, "Not found!");
   }
@@ -38,9 +32,22 @@ const deleteById = async (req, res) => {
   });
 };
 
-const updateById = async (req, res) => {
+const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404, "Not found!");
+  }
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found!");
   }
@@ -48,9 +55,10 @@ const updateById = async (req, res) => {
 };
 
 module.exports = {
-  getAll: ctrlWrapper(getAll),
-  getById: ctrlWrapper(getById),
-  add: ctrlWrapper(add),
-  deleteById: ctrlWrapper(deleteById),
-  updateById: ctrlWrapper(updateById),
+  getAllContacts: ctrlWrapper(getAllContacts),
+  getContactById: ctrlWrapper(getContactById),
+  addNewContact: ctrlWrapper(addNewContact),
+  deleteContactById: ctrlWrapper(deleteContactById),
+  updateContactById: ctrlWrapper(updateContactById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
