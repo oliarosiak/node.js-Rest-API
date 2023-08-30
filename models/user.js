@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const subscriptionList = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
   {
@@ -17,7 +19,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: {
@@ -31,14 +33,12 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
 
 module.exports = {
   User,
   emailRegexp,
+  subscriptionList,
 };
