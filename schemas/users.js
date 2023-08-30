@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const { emailRegexp } = require('../models/user');
+const { emailRegexp, subscriptionList } = require("../models/user");
 
 const registerJoiSchema = Joi.object({
   password: Joi.string().min(6).required().messages({
@@ -26,7 +26,20 @@ const loginJoiSchema = Joi.object({
   }),
 });
 
+const subscriptionJoiSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required()
+    .messages({
+      "string.empty": "the 'subscription' field must contain value",
+      "any.only":
+        "the 'subscription' field must be one of [starter, pro, business]",
+      "any.required": "missing subscription required field",
+    }),
+});
+
 module.exports = {
   registerJoiSchema,
   loginJoiSchema,
+  subscriptionJoiSchema,
 };

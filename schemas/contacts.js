@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const addSchema = Joi.object({
+const contactJoiSchema = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "any.required": "missing required name field" }),
@@ -13,13 +13,13 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const favoriteSchema = Joi.object({
+const favoriteJoiSchema = Joi.object({
   favorite: Joi.boolean()
     .required()
     .messages({ "any.required": "missing required favorite field" }),
 });
 
 module.exports = {
-  addSchema,
-  favoriteSchema,
+  contactJoiSchema,
+  favoriteJoiSchema,
 };
