@@ -1,8 +1,18 @@
 const express = require("express");
 
 const { validateBody, isValidToken } = require("../../middlewares");
-const { registerJoiSchema, loginJoiSchema } = require("../../schemas/users");
-const { register, login, current, logout } = require("../../controllers/auth");
+const {
+  registerJoiSchema,
+  loginJoiSchema,
+  subscriptionJoiSchema,
+} = require("../../schemas/users");
+const {
+  register,
+  login,
+  current,
+  logout,
+  subscription,
+} = require("../../controllers/auth");
 
 const router = express.Router();
 
@@ -13,5 +23,12 @@ router.post("/login", validateBody(loginJoiSchema), login);
 router.get("/current", isValidToken, current);
 
 router.post("/logout", isValidToken, logout);
+
+router.patch(
+  "/",
+  isValidToken,
+  validateBody(subscriptionJoiSchema),
+  subscription
+);
 
 module.exports = router;
