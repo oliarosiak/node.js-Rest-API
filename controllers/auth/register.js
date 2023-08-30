@@ -15,8 +15,12 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
-  console.log(newUser);
-  res.status(201).json({ email: newUser.email });
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
 };
 
 module.exports = {
