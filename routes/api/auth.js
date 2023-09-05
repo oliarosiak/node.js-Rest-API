@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { validateBody, isValidToken } = require("../../middlewares");
+const { validateBody, isValidToken, upload } = require("../../middlewares");
 const {
   registerJoiSchema,
   loginJoiSchema,
@@ -12,6 +12,7 @@ const {
   current,
   logout,
   subscription,
+  avatar,
 } = require("../../controllers/auth");
 
 const router = express.Router();
@@ -30,5 +31,7 @@ router.patch(
   validateBody(subscriptionJoiSchema),
   subscription
 );
+
+router.patch("/avatars", isValidToken, upload.single("avatar"), avatar);
 
 module.exports = router;
