@@ -11,7 +11,7 @@ const isValidToken = async (req, res, next) => {
   }
   
   if (!token) {
-    next(HttpError(401, "Error if token"));
+    next(HttpError(401));
   }
 
   try {
