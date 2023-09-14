@@ -9,6 +9,11 @@ const isValidToken = async (req, res, next) => {
   if (bearer !== "Bearer") {
     next(HttpError(401));
   }
+  
+  if (!token) {
+    next(HttpError(401));
+  }
+
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);

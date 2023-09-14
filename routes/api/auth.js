@@ -5,9 +5,11 @@ const {
   registerJoiSchema,
   loginJoiSchema,
   subscriptionJoiSchema,
+  emailJoiSchema,
 } = require("../../schemas/users");
 const {
   register,
+  verify,
   login,
   current,
   logout,
@@ -18,6 +20,10 @@ const {
 const router = express.Router();
 
 router.post("/register", validateBody(registerJoiSchema), register);
+
+router.get("/verify/:verificationToken", verify.email);
+
+router.post("/verify", validateBody(emailJoiSchema), verify.resend);
 
 router.post("/login", validateBody(loginJoiSchema), login);
 

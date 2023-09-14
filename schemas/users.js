@@ -13,6 +13,13 @@ const registerJoiSchema = Joi.object({
   }),
 });
 
+const emailJoiSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.pattern.base": "Something wrong with email",
+    "any.required": "missing required email field",
+  }),
+});
+
 const loginJoiSchema = Joi.object({
   password: Joi.string().min(6).required().messages({
     "string.empty": "the 'password' field must contain value",
@@ -42,4 +49,5 @@ module.exports = {
   registerJoiSchema,
   loginJoiSchema,
   subscriptionJoiSchema,
+  emailJoiSchema
 };
